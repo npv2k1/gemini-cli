@@ -320,6 +320,75 @@ describe('createContentGenerator', () => {
       ),
     );
   });
+
+  it('should pass baseUrl from GEMINI_API_BASE_URL when set', async () => {
+    const mockConfig = {
+      getUsageStatisticsEnabled: () => false,
+    } as unknown as Config;
+
+    const mockGenerator = {
+      models: {},
+    } as unknown as GoogleGenAI;
+    vi.mocked(GoogleGenAI).mockImplementation(() => mockGenerator as never);
+    vi.stubEnv('GEMINI_API_BASE_URL', 'https://custom-api.example.com');
+
+    await createContentGenerator(
+      {
+        apiKey: 'test-api-key',
+        authType: AuthType.USE_GEMINI,
+      },
+      mockConfig,
+    );
+
+    expect(GoogleGenAI).toHaveBeenCalledWith({
+      apiKey: 'test-api-key',
+      vertexai: undefined,
+      httpOptions: {
+        headers: expect.objectContaining({
+          'User-Agent': expect.any(String),
+        }),
+        baseUrl: 'https://custom-api.example.com',
+      },
+    });
+  });
+
+  it('should not pass baseUrl when GEMINI_API_BASE_URL is not set', async () => {
+    const mockConfig = {
+      getUsageStatisticsEnabled: () => false,
+    } as unknown as Config;
+
+    const mockGenerator = {
+      models: {},
+    } as unknown as GoogleGenAI;
+    vi.mocked(GoogleGenAI).mockImplementation(() => mockGenerator as never);
+    // GEMINI_API_BASE_URL is not stubbed, so it will be undefined
+
+    await createContentGenerator(
+      {
+        apiKey: 'test-api-key',
+        authType: AuthType.USE_GEMINI,
+      },
+      mockConfig,
+    );
+
+    expect(GoogleGenAI).toHaveBeenCalledWith({
+      apiKey: 'test-api-key',
+      vertexai: undefined,
+      httpOptions: {
+        headers: expect.objectContaining({
+          'User-Agent': expect.any(String),
+        }),
+      },
+    });
+    // Explicitly assert that baseUrl is NOT present
+    expect(GoogleGenAI).toHaveBeenCalledWith(
+      expect.not.objectContaining({
+        httpOptions: expect.objectContaining({
+          baseUrl: expect.any(String),
+        }),
+      }),
+    );
+  });
 });
 
 describe('createContentGeneratorConfig', () => {

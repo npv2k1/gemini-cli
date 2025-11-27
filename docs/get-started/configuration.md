@@ -989,6 +989,12 @@ the `advanced.excludedEnvVars` setting in your `settings.json` file.
   - One of several available [authentication methods](./authentication.md).
   - Set this in your shell profile (e.g., `~/.bashrc`, `~/.zshrc`) or an `.env`
     file.
+- **`GEMINI_API_BASE_URL`**:
+  - Specifies a custom base URL for the Gemini API endpoint.
+  - Useful for proxies, custom deployments, or alternative API endpoints.
+  - When set, all API requests will be sent to this URL instead of the default
+    Gemini API endpoint.
+  - Example: `export GEMINI_API_BASE_URL="https://custom-api.example.com"`
 - **`GEMINI_MODEL`**:
   - Specifies the default Gemini model to use.
   - Overrides the hardcoded default

@@ -476,6 +476,12 @@ the `excludedProjectEnvVars` setting in your `settings.json` file.
   - If set to `bearer`, the API key will be sent in the
     `Authorization: Bearer <key>` header.
   - Example: `export GEMINI_API_KEY_AUTH_MECHANISM="bearer"`
+- **`GEMINI_API_BASE_URL`**:
+  - Specifies a custom base URL for the Gemini API endpoint.
+  - Useful for proxies, custom deployments, or alternative API endpoints.
+  - When set, all API requests will be sent to this URL instead of the default
+    Gemini API endpoint.
+  - Example: `export GEMINI_API_BASE_URL="https://custom-api.example.com"`
 - **`GOOGLE_API_KEY`**:
   - Your Google Cloud API key.
   - Required for using Vertex AI in express mode.
